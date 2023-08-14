@@ -4,7 +4,7 @@ use axum::{routing::get, Router};
 
 use crate::{controllers::hello_world, routes::songs::songs_routes};
 use http::{header, Method};
-use tower_http::cors::{CorsLayer, Any};
+use tower_http::cors::CorsLayer;
 
 mod controllers;
 mod models;
@@ -14,6 +14,13 @@ mod schema;
 #[tokio::main]
 async fn main() {
     let port = dotenvy::var("PORT").unwrap_or("8080".to_string());
+
+
+    let origins = [
+        "http://localhost:8080".parse().unwrap(),
+        "http://localhost:3000".parse().unwrap(),
+        "https://search-alabanzas.vercel.app".parse().unwrap(),
+    ];
 
     let cors = CorsLayer::new()
         .allow_headers(vec![
@@ -34,7 +41,7 @@ async fn main() {
             Method::PATCH,
             Method::TRACE,
         ])
-        .allow_origin(Any);
+        .allow_origin(origins);
 
     let app = Router::new()
         .nest("/songs", songs_routes())
