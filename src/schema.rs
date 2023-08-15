@@ -1,11 +1,8 @@
 // @generated automatically by Diesel CLI.
 
 pub mod sql_types {
-    use serde::{Deserialize, Serialize};
-
     #[derive(diesel::query_builder::QueryId, diesel::sql_types::SqlType)]
     #[diesel(postgres_type(name = "category"))]
-    #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
     pub struct Category;
 }
 
@@ -15,9 +12,9 @@ diesel::table! {
 
     songs (id) {
         id -> Int4,
-        name -> Text,
+        title -> Text,
         category -> Category,
-        interpreter -> Text,
+        interpreter -> Nullable<Text>,
         num_verses -> Int4,
     }
 }
@@ -32,4 +29,7 @@ diesel::table! {
 
 diesel::joinable!(verses -> songs (song_id));
 
-diesel::allow_tables_to_appear_in_same_query!(songs, verses,);
+diesel::allow_tables_to_appear_in_same_query!(
+    songs,
+    verses,
+);
