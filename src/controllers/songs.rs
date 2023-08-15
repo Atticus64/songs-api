@@ -43,7 +43,9 @@ pub async fn search_song(query: Query<Pagination>) -> Json<ResultSearch> {
 
     let page = query.page.unwrap_or(1) - 1;
 
-    let offset = page * query.per_page.unwrap_or(10);
+    let per_page = query.per_page.unwrap_or(10);
+
+    let offset = page * per_page;
 
     let q = query.q.to_lowercase();
 
@@ -52,7 +54,6 @@ pub async fn search_song(query: Query<Pagination>) -> Json<ResultSearch> {
         .count()
         .get_result(&mut connection).unwrap();
 
-    let per_page = query.per_page.unwrap_or(10);
 
     let data = songs.inner_join(verses)
         .select((Vers::as_select(), Song::as_select()))
