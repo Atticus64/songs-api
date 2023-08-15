@@ -2,19 +2,18 @@ use std::net::SocketAddr;
 
 use axum::{routing::get, Router};
 
-use crate::{controllers::hello_world, routes::songs::songs_routes, db::test_connection};
+use crate::{controllers::hello_world, db::test_connection, routes::songs::songs_routes};
 use http::{header, Method};
 use tower_http::cors::CorsLayer;
 
 mod controllers;
+mod db;
 mod models;
 mod routes;
-mod db;
 mod schema;
 
 #[tokio::main]
 async fn main() {
-
     let port = dotenvy::var("PORT").unwrap_or("8080".to_string());
     test_connection().unwrap();
 

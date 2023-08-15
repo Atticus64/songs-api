@@ -3,7 +3,7 @@ use std::fmt;
 use crate::schema::songs;
 use crate::schema::verses;
 use diesel::prelude::*;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(PartialEq, Debug, Clone, Serialize, Deserialize, diesel_derive_enum::DbEnum)]
 #[ExistingTypePath = "crate::schema::sql_types::Category"]
@@ -13,7 +13,7 @@ pub enum Categorie {
     #[serde(alias = "adoracion")]
     Adoracion,
     #[serde(alias = "ministracion")]
-    Ministracion
+    Ministracion,
 }
 
 #[derive(Queryable, Selectable, Clone, Debug, Serialize, Deserialize)]
@@ -43,7 +43,6 @@ impl fmt::Display for Song {
         )
     }
 }
-
 
 #[derive(Insertable, Serialize, Deserialize)]
 #[diesel(table_name = songs)]

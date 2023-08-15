@@ -1,4 +1,4 @@
-use diesel::{insert_into, RunQueryDsl, PgConnection, Connection};
+use diesel::{insert_into, Connection, PgConnection, RunQueryDsl};
 use dotenvy::dotenv;
 use serde::{Deserialize, Serialize};
 use std::{env, fs};
@@ -14,7 +14,7 @@ struct Data {
 }
 
 #[warn(dead_code)]
-fn list_content() -> Result<(), Box<dyn std::error::Error>> {
+pub fn list_content() -> Result<(), Box<dyn std::error::Error>> {
     let raw = fs::read_to_string("songs.json")?;
     dotenv().ok();
     let d = fs::read_to_string("exaltacion.json")?;
@@ -35,19 +35,19 @@ fn list_content() -> Result<(), Box<dyn std::error::Error>> {
         let s = d_verses.iter().find(|x| x.title == song.title).unwrap();
         println!("title: {}", s.title);
         for v in s.verses.clone() {
-            let inserted = insert_into(verses).values(&Vers {
-                id: j,
-                content: v,
-                song_id: i
-            }).execute(&mut connection)?;
+            let inserted = insert_into(verses)
+                .values(&Vers {
+                    id: j,
+                    content: v,
+                    song_id: i,
+                })
+                .execute(&mut connection)?;
 
             println!("inserted: {}", inserted);
             j += 1;
         }
         i += 1;
     }
-    
+
     Ok(())
 }
-
-

@@ -29,7 +29,4 @@ diesel::table! {
 
 diesel::joinable!(verses -> songs (song_id));
 
-diesel::allow_tables_to_appear_in_same_query!(
-    songs,
-    verses,
-);
+diesel::allow_tables_to_appear_in_same_query!(songs, verses,);
